@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { fetchImages } from "service/api";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
@@ -7,7 +7,6 @@ import { LineWave } from 'react-loader-spinner';
 import { GlobalStyle } from "./GlobalStyle";
 import { Layout } from "./Layout.styled";
 import toast, { Toaster } from 'react-hot-toast';
-import {animateScroll as scroll} from 'react-scroll'
 
 export const App = () => {
   const [query, setQuery] = useState('');
@@ -37,12 +36,12 @@ export const App = () => {
         setImages(prev => [...prev, ...newImages.hits]);
         setLoadMore(newImages.totalHits > page * 12)
       } catch (error) {
-        toast.error(`Opps...`)
+        toast.error(`Oops...`)
       } finally {
         setLoading(false);
       }
     }
-    fetchQuery();
+    fetchQuery();   
   }, [query, page]);
 
   const handleSubmit = (evt) => {
@@ -52,19 +51,24 @@ export const App = () => {
     setImages([])
     setPage(1)
   };
+  const GalleryRef = useRef();
 
   const handleLoadMore = () => {
     setPage(prevState => prevState + 1);
-    scroll.scrollMore(500);
+    setTimeout(() => {
+      const { top } = (GalleryRef.current.getBoundingClientRect());
+    console.log(top/-2);
+      window.scrollTo({ top: -top + 820, behavior: 'smooth' })
+    }, 600);
   };
  
   return (
       <Layout>
         <Searchbar
           onSubmit={handleSubmit}
-          loading={loading} />
+        loading={loading} />
         {loading === true && page === 1 && <LineWave width="100%" color = '#5c5c8a'/>}
-        {images.length > 0 && <ImageGallery items={images} />}
+      {images.length > 0 && <ImageGallery items={images} ref={GalleryRef} />}
         {(images.length > 0) && loadMore &&
           <Button
             onClick={handleLoadMore}

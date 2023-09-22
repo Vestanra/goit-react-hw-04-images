@@ -1,11 +1,12 @@
+import { forwardRef } from "react";
 import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { Gallery } from "./ImageGallery.styled";
 import PropTypes from 'prop-types';
 
-export const ImageGallery = ({items}) => {
+export const ImageGallery = forwardRef(({ items }, ref) => {
     return (
         <div>
-            <Gallery>
+            <Gallery ref={ref}>
                 {items.map((item) => (<ImageGalleryItem
                     key={item.id}
                     item={item}
@@ -14,7 +15,7 @@ export const ImageGallery = ({items}) => {
             </Gallery>            
         </div>
     )
-}
+})
 
 ImageGallery.propTypes = {
     items: PropTypes.arrayOf(
