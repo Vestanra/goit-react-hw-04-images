@@ -57,7 +57,6 @@ export const App = () => {
     setPage(prevState => prevState + 1);
     setTimeout(() => {
       const { top } = (GalleryRef.current.getBoundingClientRect());
-    console.log(top/-2);
       window.scrollTo({ top: -top + 820, behavior: 'smooth' })
     }, 600);
   };

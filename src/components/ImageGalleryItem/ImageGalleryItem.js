@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../Modal/Modal";
 import { Img, ImgWrapper } from "./ImageGalleryItem.styled";
 import PropTypes from 'prop-types';
@@ -16,14 +16,20 @@ export const ImageGalleryItem = ({ item: { tags, webformatURL, largeImageURL } }
         setModalIsOpen(false);
     } 
 
-    const onBackdropeClick = (evt) => {
-        if (evt.target === evt.currentTarget) {
-            closeModal();
+    useEffect(() => {
+        const body = document.body;
+        if (modalIsOpen) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = 'auto';
         }
-    };
+        return () => {
+            body.style.overflow = 'auto';
+        };
+    }, [modalIsOpen]);
         
     return (
-        <ImgWrapper>
+        <ImgWrapper >
             <Img
                 alt={tags}
                 src={webformatURL}
@@ -33,7 +39,7 @@ export const ImageGalleryItem = ({ item: { tags, webformatURL, largeImageURL } }
                 img={modalImg}
                 modalIsOpen={modalIsOpen}
                 closeModal={closeModal}
-                onBackdropeClick={onBackdropeClick}/>
+                />
         </ImgWrapper>
     )
 }
