@@ -51,6 +51,7 @@ export const App = () => {
     setImages([])
     setPage(1)
   };
+  
   const GalleryRef = useRef();
 
   const handleLoadMore = () => {
